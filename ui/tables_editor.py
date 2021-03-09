@@ -5,7 +5,7 @@ import os
 from PyQt5 import QtWidgets, QtCore, QtGui, Qt, QtSql, uic
 
 ui_path = os.path.dirname(os.path.abspath(__file__))
-modify_table_dialogUi= uic.loadUiType(os.path.join(ui_path, "ui/modify_table_dialog.ui"))[0]
+modify_table_dialogUi= uic.loadUiType(os.path.join(ui_path, "modify_table_dialog.ui"))[0]
 
 
 class ModifyTableDialog(QtWidgets.QDialog, modify_table_dialogUi):
