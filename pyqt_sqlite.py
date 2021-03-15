@@ -17,11 +17,7 @@ import os
 
 from PyQt5 import QtWidgets, QtCore, QtGui, Qt, QtSql, uic
 
-from ui import ModifyTableDialog
-from ui import create_xml
-TYPE_DICT={1:"BOOLEAN", 2:"INTEGER",6:"NUMERIC", 10:"TEXT", 12:"BLOB"}
-TYPE_relation={1:"alone field with new columns",2:"related field with previews columns"}
-TYPE_API={1:"field",2:"drop list",3:"title"}
+from ui import ModifyTableDialog,TYPE_DICT,addUi
 
 from functools import partial
 ui_path = os.path.dirname(os.path.abspath(__file__))
@@ -54,15 +50,7 @@ class MainWindow(QtWidgets.QMainWindow, mainwindowUi):
         self.recent_files=self.settings.value('recent_files',[])
         self.update_recent_files()
         
-    def addUi(self, formName,newForm=True,fieldNew=True,fieldRelated=True):  
-        if newForm:
-            print("adding xml file")
-            create_xml(formName)
-        if fieldNew:
-            pass
-        if fieldRelated:
-            pass
-
+    
     def setTitle(self, title=None):
         t_str="PyQt SqLite"
         if title:
@@ -76,9 +64,8 @@ class MainWindow(QtWidgets.QMainWindow, mainwindowUi):
     @QtCore.pyqtSlot()
     def on_commandLinkButton_clicked(self):
         dialog=ModifyTableDialog(self)
-        self.addUi("default",newForm=True)
-
         dialog.exec_()
+
     @QtCore.pyqtSlot()
     def on_commandLinkButton_3_clicked(self):
         if self.selectedTable:
@@ -150,11 +137,11 @@ class MainWindow(QtWidgets.QMainWindow, mainwindowUi):
                     col_type=QtGui.QStandardItem(type_str)
                 
                     tb_name.appendRow([col_name, col_type])
-                 
+                    
                 tab_par.appendRow([tb_name, tb_type, tb_schema])
                 
             self.tree_model.appendRow(tab_par)
-
+            
 
     def error_check(self, model):
         

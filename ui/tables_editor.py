@@ -1,11 +1,12 @@
 
 import sys
 import os
-
+from .xml_editor import addUi
 from PyQt5 import QtWidgets, QtCore, QtGui, Qt, QtSql, uic
 
 ui_path = os.path.dirname(os.path.abspath(__file__))
 modify_table_dialogUi= uic.loadUiType(os.path.join(ui_path, "modify_table_dialog.ui"))[0]
+TYPE_DICT={1:"BOOLEAN", 2:"INTEGER",6:"NUMERIC", 10:"TEXT", 12:"BLOB"}
 
 
 class ModifyTableDialog(QtWidgets.QDialog, modify_table_dialogUi):
@@ -56,14 +57,20 @@ class ModifyTableDialog(QtWidgets.QDialog, modify_table_dialogUi):
         
         
         self.query='CREATE TABLE `%s` (\n' % self.lineEdit.text()
+
         
+
         self.query +=',\n'.join(sql_lines)
         
         self.query +='\n)'
     
         self.textEdit.setText(self.query)
         
-        if self.lineEdit.text() and sql_lines: self.buttonBox.buttons()[0].setEnabled(True)
+        if self.lineEdit.text() and sql_lines: 
+            self.buttonBox.buttons()[0].setEnabled(True)
+            addUi(self.lineEdit.text(),newForm=True)        #adding new form for each table
+            addUi(self.lineEdit.text(),newForm=False,newField=True)        #adding new form for each table
+        
         else: self.buttonBox.buttons()[0].setEnabled(False)
        
         
@@ -96,7 +103,7 @@ class ModifyTableDialog(QtWidgets.QDialog, modify_table_dialogUi):
         self.tableWidget.removeRow(r)
         self.tableWidget.update()
         self.update_code_text()
-
+        
     @QtCore.pyqtSlot()
     def on_commandLinkButton_clicked(self):
         
@@ -125,7 +132,7 @@ class ModifyTableDialog(QtWidgets.QDialog, modify_table_dialogUi):
         self.tableWidget.setCellWidget(rc, 4, ai_check_box)
         self.ai_button_group.addButton(ai_check_box)
         ai_check_box.clicked.connect(self.make_primary_key)
-
+        
     def make_primary_key(self):
         for row in range(self.model.rowCount()):
             ai=self.tableWidget.cellWidget(row,4)
@@ -135,6 +142,7 @@ class ModifyTableDialog(QtWidgets.QDialog, modify_table_dialogUi):
                     pk.setChecked(True)
                     type_combo=self.tableWidget.cellWidget(row,1)
                     type_combo.setCurrentIndex(1)
+                    
                 else:
                     pk.setChecked(False)
   
