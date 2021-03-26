@@ -1,3 +1,7 @@
+__author__ = 'youssri Ahmed Hamdy <estratigy@yahoo.com>'
+__copyright__ = 'Copyright (c) 2021'
+__version__ = '1.0.0'
+
 import xml
 print(xml.__file__)
 
